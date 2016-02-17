@@ -4,13 +4,13 @@
 
 	//以下是数据库的配置信息 轻根据本地状况配置
 
-	$config['host_name'] = '10.10.0.78';
+	$config['host_name'] = 'localhost';
 
-	$config['user'] = 'admin';
+	$config['user'] = 'root';
 
-	$config['password'] = 'admin';
+	$config['password'] = '123456';
 
-	$config['dbname'] = 'ata';
+	$config['dbname'] = 'joke';
 
 	//实例化数据库操作类
 	$db = new BaseSql($config);

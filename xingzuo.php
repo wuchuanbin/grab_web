@@ -5,23 +5,18 @@ header("Content-type: text/html; charset=utf-8");
   *  采集xxhh.com
   *
   * */
-ignore_user_abort(1);
-include_once('./config.php');
-include ('./snoopy.class.php');
-set_time_limit(0);
-include 'simple_html_dom.php';
+
+// set_time_limit(0);
+include './simple_html_dom.php';
+include './config.php';
 // 新建一个Dom实例
 $html = new simple_html_dom();
 
 
-$snoopy = new Snoopy();
 
-// $type = 18;
 
-// $sourceURL = "http://www.3jy.com/tag/12/2.html";
-// $sourceURL = "http://weixin.sogou.com/pcindex/pc/pc_5/pc_5.html";
-$i = 0;
-$contentUrl = "http://www.xicidaili.com/nn/".$i;
+
+
 // $sourceList = 'http://weixin.sogou.com/pcindex/pc/pc_'.$type.'/';
 // $contentUrl = "http://weixin.sogou.com/gzh?openid=oIWsFt9eVugAjPSViucxPUMqZRTc&ext=lA5I5al3X8BYrtW1H7KizeSlxz3j7jXNbhYq5hHUiK3kRa_38c2fM0YicIPGGskc";
 
@@ -34,7 +29,39 @@ ini_set('user_agent','Sosospider+(+http://help.soso.com/webspider.htm)');
 
 
 
+$urlA = file('./xingzuo-jinniu.txt');
+$table = 'xingzuo';
+foreach ($urlA as $key => $value) {
+	# code...
+	$url_t = explode('^^',$value);
 
+	$html =file_get_html('http://www.xzw.com/'.$url_t[0]);
+	foreach($html->find('.sbody') as $element) {
+		// echo $str =    strip_tags($element->innertext)."\n";
+
+
+
+	//制定需要操作的数据数组
+	echo $data['title'] = $url_t[1];
+	$data['content'] = trim(strip_tags($element->innertext));
+
+	$data['href'] = $url_t[0];
+	//执行添加操作 返回1 插入成功
+	$r = $db->insert($table,$data);
+	echo $r."\n";
+
+		
+		// $s =  $element->find('.bar',0)->title."\n";
+
+		// $s = floatval($s)."\n";
+		// if($s<= 4.5 && $s>0){
+		// 	$str .= strip_tags($element->find('td',2)).':'.strip_tags($element->find('td',3)) . "\n";
+		// }
+		
+	}
+	//die;
+}
+print_r();die;
 
 // print_r($context);die;
 
@@ -69,30 +96,33 @@ ini_set('user_agent','Sosospider+(+http://help.soso.com/webspider.htm)');
 //文章信息
 
 
-$arr = array();
-for($i=1;$i<7;$i++){
+for($i=1;$i<100;$i++){
 	// $i = 0;
-	$contentUrl = "http://www.xicidaili.com/nn/".$i;
-	$html =file_get_html($contentUrl);
+	$contentUrl = "http://www.xzw.com/astro/pisces/l_".$i.".html";
+	
 	//获取所有的img元素 
-	foreach($html->find('#ip_list tr') as $element) {
-		// echo   strip_tags($element->find('td',2)).':';
-		
-		$s =  $element->find('.bar',0)->title."\n";
+	$html =file_get_html($contentUrl);
 
-		$s = floatval($s)."\n";
-		if($s<= 4.5 && $s>0){
-			$str .= strip_tags($element->find('td',2)).':'.strip_tags($element->find('td',3)) . "\n";
-		}
+
+	foreach($html->find('.l-item li h3') as $element) {
+		$str .=    ($element->find('a',0)->href).'^^'.strip_tags($element->innertext)."\n";
+		
+		// $s =  $element->find('.bar',0)->title."\n";
+
+		// $s = floatval($s)."\n";
+		// if($s<= 4.5 && $s>0){
+		// 	$str .= strip_tags($element->find('td',2)).':'.strip_tags($element->find('td',3)) . "\n";
+		// }
 		
 	}
-	// echo strlen($str);
+	 echo $str;
 	
 	
 }
+
 // echo strlen($str);
 if(strlen($str)>5000){
-	file_put_contents('/home/wwwroot/proxy1.dat', trim($str));
+	file_put_contents('./xingzuo-shuangyu.txt', trim($str));
 } else {
 	file_put_contents('/home/wwwroot/proxy-over.dat', 'die'.date('Y-m-d H:i:s')."\n");
 }
