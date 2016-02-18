@@ -29,12 +29,36 @@ ini_set('user_agent','Sosospider+(+http://help.soso.com/webspider.htm)');
 
 
 
-$urlA = file('./xingzuo-jinniu.txt');
+
+
+$dA = array(
+	
+	'chunv'=>'xingzuo-chunv.txt',
+	'mojie'=>'xingzuo-mojie.txt',
+	'sheshou'=>'xingzuo-sheshou.txt',
+	'shizi'=>'xingzuo-shizi.txt',
+	'shuangyu'=>'xingzuo-shuangyu.txt',
+	'shuangzi'=>'xingzuo-shuangzi.txt',
+	'shuiping'=>'xingzuo-shuiping.txt',
+	'juxie'=>'xingzuo-juxie.txt',
+	'tianxie'=>'xingzuo-tianxie.txt',
+	'tiancheng'=>'xingzuo-tiancheng.txt',
+	
+	);
 $table = 'xingzuo';
-foreach ($urlA as $key => $value) {
+// $i = 0;
+foreach ($dA as $key2 => $value2) {
+	# code...
+	//key2 为标识
+
+	$urlA = file('./'.$value2);
+
+
+
+	foreach ($urlA as $key => $value) {
 	# code...
 	$url_t = explode('^^',$value);
-
+	echo $url_t[0];
 	$html =file_get_html('http://www.xzw.com/'.$url_t[0]);
 	foreach($html->find('.sbody') as $element) {
 		// echo $str =    strip_tags($element->innertext)."\n";
@@ -44,12 +68,14 @@ foreach ($urlA as $key => $value) {
 	//制定需要操作的数据数组
 	echo $data['title'] = $url_t[1];
 	$data['content'] = trim(strip_tags($element->innertext));
+	$data['cate'] = $key2;
 
 	$data['href'] = $url_t[0];
 	//执行添加操作 返回1 插入成功
 	$r = $db->insert($table,$data);
 	echo $r."\n";
-
+	// ?
+// echo $key2;
 		
 		// $s =  $element->find('.bar',0)->title."\n";
 
@@ -59,8 +85,13 @@ foreach ($urlA as $key => $value) {
 		// }
 		
 	}
-	//die;
+	// die;
 }
+
+
+
+}
+
 print_r();die;
 
 // print_r($context);die;
@@ -98,7 +129,7 @@ print_r();die;
 
 for($i=1;$i<100;$i++){
 	// $i = 0;
-	$contentUrl = "http://www.xzw.com/astro/pisces/l_".$i.".html";
+	$contentUrl = "http://www.xzw.com/astro/scorpio/l_".$i.".html";
 	
 	//获取所有的img元素 
 	$html =file_get_html($contentUrl);
@@ -122,7 +153,7 @@ for($i=1;$i<100;$i++){
 
 // echo strlen($str);
 if(strlen($str)>5000){
-	file_put_contents('./xingzuo-shuangyu.txt', trim($str));
+	file_put_contents('./xingzuo-tianxie.txt', trim($str));
 } else {
 	file_put_contents('/home/wwwroot/proxy-over.dat', 'die'.date('Y-m-d H:i:s')."\n");
 }
